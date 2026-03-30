@@ -4,6 +4,7 @@ import '../core/expression/expression_context.dart';
 import '../core/models/screen_contract.dart';
 import '../core/network/api_client.dart';
 import '../core/parser/component_parser.dart';
+import '../core/theme/theme_contract.dart';
 import 'widgets/server_button.dart';
 
 /// A page that fetches a screen contract by [screenId] and renders
@@ -95,7 +96,7 @@ class _DynamicScreenPageState extends InputCollectorState<DynamicScreenPage> {
           expressionContext: ExpressionContext(contract.context),
         );
 
-        return Scaffold(
+        Widget page = Scaffold(
           appBar: AppBar(title: Text(contract.screen.title)),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -103,6 +104,16 @@ class _DynamicScreenPageState extends InputCollectorState<DynamicScreenPage> {
             ),
           ),
         );
+
+        if (contract.theme != null) {
+          final themeContract = ThemeContract.fromJson(contract.theme!);
+          page = Theme(
+            data: themeContract.applyTo(Theme.of(context)),
+            child: page,
+          );
+        }
+
+        return page;
       },
     );
   }

@@ -166,10 +166,14 @@ class ScreenContract {
   /// Optional initial variable bindings for the expression engine.
   final Map<String, dynamic> context;
 
+  /// Optional per-screen theme overrides (colors, typography, brightness).
+  final Map<String, dynamic>? theme;
+
   const ScreenContract({
     required this.schemaVersion,
     required this.screen,
     this.context = const {},
+    this.theme,
   });
 
   factory ScreenContract.fromJson(Map<String, dynamic> json) {
@@ -177,6 +181,7 @@ class ScreenContract {
       schemaVersion: json['schemaVersion'] as String,
       screen: Screen.fromJson(json['screen'] as Map<String, dynamic>),
       context: (json['context'] as Map<String, dynamic>?) ?? {},
+      theme: json['theme'] as Map<String, dynamic>?,
     );
   }
 }
