@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'core/network/api_client.dart';
 import 'core/network/local_api_client.dart';
+import 'playground/playground_page.dart';
 import 'presentation/dynamic_screen_page.dart';
+import 'presentation/landing_page.dart';
 
 void main() {
   runApp(const BdcApp());
@@ -39,11 +41,26 @@ class _BdcAppState extends State<BdcApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6200EE)),
         useMaterial3: true,
       ),
-      initialRoute: '/screen/home',
+      initialRoute: '/',
       onGenerateRoute: (settings) {
         final uri = Uri.parse(settings.name ?? '');
 
-        if (uri.pathSegments.length == 2 && uri.pathSegments.first == 'screen') {
+        if (uri.path == '/') {
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (_) => const LandingPage(),
+          );
+        }
+
+        if (uri.path == '/playground') {
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (_) => const PlaygroundPage(),
+          );
+        }
+
+        if (uri.pathSegments.length == 2 &&
+            uri.pathSegments.first == 'screen') {
           final screenId = uri.pathSegments[1];
           return MaterialPageRoute(
             settings: settings,
@@ -55,10 +72,7 @@ class _BdcAppState extends State<BdcApp> {
         }
 
         return MaterialPageRoute(
-          builder: (_) => DynamicScreenPage(
-            screenId: 'home',
-            apiClient: _apiClient,
-          ),
+          builder: (_) => const LandingPage(),
         );
       },
     );
