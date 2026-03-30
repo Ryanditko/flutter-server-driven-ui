@@ -9,7 +9,13 @@ import '../core/models/screen_contract.dart';
 class PlaygroundApiClient {
   static const _basePath = 'assets/screens';
 
-  static const availableScreens = ['home', 'profile', 'form', 'components_showcase'];
+  static const availableScreens = [
+    'home',
+    'profile',
+    'form',
+    'components_showcase',
+    'expressions_demo',
+  ];
 
   ScreenContract parseContract(String jsonString) {
     final json = jsonDecode(jsonString) as Map<String, dynamic>;
