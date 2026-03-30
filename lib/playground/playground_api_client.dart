@@ -54,7 +54,7 @@ class PlaygroundApiClient {
                 'props': {
                   'label': 'Tap me',
                   'style': {
-                    'backgroundColor': '#6200EE',
+                    'backgroundColor': '#820AD1',
                     'textColor': '#FFFFFF',
                   },
                 },
