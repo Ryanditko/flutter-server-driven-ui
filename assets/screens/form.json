@@ -15,7 +15,8 @@
           "type": "text",
           "props": {
             "content": "We value your feedback",
-            "style": { "fontSize": 22, "fontWeight": "bold" }
+            "style": { "fontSize": 22, "fontWeight": "bold" },
+            "animation": { "type": "fadeIn", "duration": 400 }
           }
         },
         { "type": "spacer", "props": { "height": 8 } },
@@ -23,33 +24,56 @@
           "type": "text",
           "props": {
             "content": "Fill in the fields below and submit.",
-            "style": { "fontSize": 14, "color": "#666666" }
+            "style": { "fontSize": 14, "color": "#666666" },
+            "animation": { "type": "fadeIn", "duration": 400, "delay": 100 }
           }
         },
         { "type": "spacer", "props": { "height": 24 } },
         {
           "type": "input",
           "id": "name",
-          "props": { "label": "Your Name", "hint": "Enter your full name" }
+          "props": {
+            "label": "Your Name",
+            "hint": "Enter your full name",
+            "animation": { "type": "slideUp", "duration": 400, "delay": 150 },
+            "validation": { "required": true, "minLength": 2, "message": "Name must be at least 2 characters" }
+          }
         },
         { "type": "spacer", "props": { "height": 12 } },
         {
           "type": "input",
           "id": "email",
-          "props": { "label": "Email", "hint": "you@example.com", "keyboardType": "emailAddress" }
+          "props": {
+            "label": "Email",
+            "hint": "you@example.com",
+            "keyboardType": "emailAddress",
+            "animation": { "type": "slideUp", "duration": 400, "delay": 250 },
+            "validation": {
+              "required": true,
+              "pattern": "^[\\w\\-\\.]+@([\\w\\-]+\\.)+[\\w\\-]{2,4}$",
+              "message": "Please enter a valid email address"
+            }
+          }
         },
         { "type": "spacer", "props": { "height": 12 } },
         {
           "type": "input",
           "id": "message",
-          "props": { "label": "Message", "hint": "Tell us what you think...", "maxLines": 4 }
+          "props": {
+            "label": "Message",
+            "hint": "Tell us what you think...",
+            "maxLines": 4,
+            "animation": { "type": "slideUp", "duration": 400, "delay": 350 },
+            "validation": { "required": true, "minLength": 10, "maxLength": 500 }
+          }
         },
         { "type": "spacer", "props": { "height": 24 } },
         {
           "type": "button",
           "props": {
             "label": "Submit Feedback",
-            "style": { "backgroundColor": "#820AD1", "textColor": "#FFFFFF" }
+            "style": { "backgroundColor": "#820AD1", "textColor": "#FFFFFF" },
+            "animation": { "type": "scale", "duration": 500, "delay": 450 }
           },
           "action": { "type": "submit" }
         },
