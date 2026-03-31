@@ -12,7 +12,10 @@ Widget buildServerIcon(
   final size = (node.props['size'] as num?)?.toDouble() ?? 24;
   final color = parseHexColor(node.props['color'] as String?);
 
-  return Icon(resolveIcon(name), size: size, color: color);
+  return Semantics(
+    label: name,
+    child: Icon(resolveIcon(name), size: size, color: color),
+  );
 }
 
 /// Maps commonly used icon name strings to their [IconData] counterparts.
