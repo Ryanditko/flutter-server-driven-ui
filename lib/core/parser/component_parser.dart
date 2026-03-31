@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../animation/entrance_animation.dart';
+import '../error/error_boundary.dart';
 import '../expression/expression_context.dart';
 import '../expression/template_engine.dart';
 import '../models/screen_contract.dart';
@@ -88,10 +90,21 @@ class ComponentParser {
     final resolved = _interpolateProps(node);
 
     final builder = _registry.getBuilder(resolved.type);
+    Widget widget;
     if (builder != null) {
-      return builder(resolved, context, (child) => parse(child, context));
+      widget = builder(resolved, context, (child) => parse(child, context));
+    } else {
+      widget = buildUnknownComponent(resolved, context, (child) => parse(child, context));
     }
-    return buildUnknownComponent(resolved, context, (child) => parse(child, context));
+
+    widget = ErrorBoundary(nodeType: resolved.type, child: widget);
+
+    final animationProps = resolved.props['animation'] as Map<String, dynamic>?;
+    if (animationProps != null) {
+      widget = EntranceAnimation.fromProps(animationProps, widget);
+    }
+
+    return widget;
   }
 
   /// Walks through [props] and interpolates any string value that
