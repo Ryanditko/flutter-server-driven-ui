@@ -48,14 +48,18 @@ class _ServerCheckboxState extends State<_ServerCheckbox> {
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      title: Text(widget.label),
-      subtitle: widget.subtitle != null ? Text(widget.subtitle!) : null,
-      value: _value,
-      onChanged: (v) {
-        setState(() => _value = v ?? false);
-        widget.onChanged?.call(widget.id, (v ?? false).toString());
-      },
+    return Semantics(
+      checked: _value,
+      label: widget.label,
+      child: CheckboxListTile(
+        title: Text(widget.label),
+        subtitle: widget.subtitle != null ? Text(widget.subtitle!) : null,
+        value: _value,
+        onChanged: (v) {
+          setState(() => _value = v ?? false);
+          widget.onChanged?.call(widget.id, (v ?? false).toString());
+        },
+      ),
     );
   }
 }
