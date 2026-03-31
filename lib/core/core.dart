@@ -1,3 +1,5 @@
+export 'animation/entrance_animation.dart';
+export 'error/error_boundary.dart';
 export 'expression/expression_context.dart';
 export 'expression/template_engine.dart';
 export 'layout/breakpoints.dart';
