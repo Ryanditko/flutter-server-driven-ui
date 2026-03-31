@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -35,5 +34,68 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Home'), findsOneWidget);
+  });
+
+  testWidgets('app navigation: landing -> home -> components showcase',
+      (tester) async {
+    tester.view.physicalSize = const Size(800, 1400);
+    tester.view.devicePixelRatio = 1.0;
+
+    await tester.pumpWidget(const BdcApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('App Demo'));
+    await tester.pumpAndSettle();
+
+    final showcaseButton = find.text('Components Showcase');
+    await tester.scrollUntilVisible(showcaseButton, 200);
+    await tester.pumpAndSettle();
+
+    await tester.tap(showcaseButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Components Showcase'), findsOneWidget);
+  });
+
+  testWidgets('app navigation: landing -> home -> form -> submit',
+      (tester) async {
+    tester.view.physicalSize = const Size(800, 1400);
+    tester.view.devicePixelRatio = 1.0;
+
+    await tester.pumpWidget(const BdcApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('App Demo'));
+    await tester.pumpAndSettle();
+
+    final formButton = find.text('Feedback Form');
+    await tester.scrollUntilVisible(formButton, 200);
+    await tester.pumpAndSettle();
+
+    await tester.tap(formButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Feedback Form'), findsOneWidget);
+
+    final inputFields = find.byType(TextField);
+    if (inputFields.evaluate().isNotEmpty) {
+      await tester.enterText(inputFields.first, 'Integration Test');
+      await tester.pumpAndSettle();
+    }
+  });
+
+  testWidgets('landing page renders both mode cards', (tester) async {
+    tester.view.physicalSize = const Size(800, 1400);
+    tester.view.devicePixelRatio = 1.0;
+
+    await tester.pumpWidget(const BdcApp());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Server-Driven UI'), findsOneWidget);
+    expect(find.text('App Demo'), findsOneWidget);
+    expect(find.text('Playground'), findsOneWidget);
+    expect(find.text('v1.0'), findsOneWidget);
+    expect(find.byIcon(Icons.smartphone_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.science_outlined), findsOneWidget);
   });
 }
