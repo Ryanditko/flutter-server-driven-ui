@@ -458,6 +458,88 @@ The `theme` field in the contract allows per-screen customization:
 
 ---
 
+## Form Validation
+
+Input fields support declarative validation rules via `props.validation`:
+
+```json
+{
+  "type": "input",
+  "id": "email",
+  "props": {
+    "label": "Email",
+    "validation": {
+      "required": true,
+      "minLength": 5,
+      "maxLength": 100,
+      "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+      "message": "Please enter a valid email"
+    }
+  }
+}
+```
+
+| Rule | Type | Description |
+|------|------|-------------|
+| `required` | `bool` | Field must not be empty |
+| `minLength` | `number` | Minimum character count |
+| `maxLength` | `number` | Maximum character count (also sets counter) |
+| `pattern` | `string` | Regex pattern to match |
+| `message` | `string` | Custom error message for all rules |
+
+Validation triggers on blur (first interaction) and then on every keystroke.
+
+---
+
+## Entrance Animations
+
+Any component can declare an entrance animation via `props.animation`:
+
+```json
+{
+  "type": "text",
+  "props": {
+    "content": "Hello",
+    "animation": { "type": "fadeIn", "duration": 500, "delay": 200 }
+  }
+}
+```
+
+| Animation Type | Description |
+|---------------|-------------|
+| `fadeIn` | Opacity from 0 to 1 |
+| `slideUp` | Slide from below + fade |
+| `slideLeft` | Slide from right + fade |
+| `scale` | Scale from 0.85 to 1 + fade |
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `type` | `string` | `"fadeIn"` | Animation type |
+| `duration` | `number` | `400` | Duration in milliseconds |
+| `delay` | `number` | `0` | Delay before starting in milliseconds |
+
+---
+
+## Error Boundary
+
+Every component is wrapped in an `ErrorBoundary` widget that catches build-time exceptions and renders a graceful fallback instead of crashing the entire screen. The fallback shows the component type and error message in a red container.
+
+---
+
+## Accessibility
+
+All interactive and leaf components include `Semantics` widgets for screen reader support:
+
+- `text` — labeled with content
+- `button` — marked as button with label
+- `image` — marked as image with semantic label
+- `icon` — labeled with icon name
+- `input` — marked as text field with label
+- `switch` — marked as toggled with label
+- `checkbox` — marked as checked with label
+
+---
+
 ## Contract Validation
 
 `ContractValidator.validate(ScreenContract)` returns a list of warnings:
@@ -505,6 +587,18 @@ classDiagram
 - **LocalApiClient** — loads JSON from `assets/screens/` via `rootBundle`
 - **HttpApiClient** — fetches contracts from an HTTP server with timeout
 - **CachedApiClient** — wraps any `ApiClient`, caching responses in-memory with configurable TTL
+
+### Mock Backend Server
+
+A standalone Dart Shelf server lives in `server/` and serves the same JSON contracts via REST:
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/screens` | List all available screen IDs |
+| `GET /api/screens/:id` | Fetch a screen contract by ID |
+| `GET /health` | Health check |
+
+Start with `cd server && dart run bin/server.dart`. Connect from the Flutter app using `HttpApiClient(baseUrl: 'http://localhost:8080/api/screens')`.
 
 ---
 
