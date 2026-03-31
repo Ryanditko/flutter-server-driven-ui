@@ -13,6 +13,8 @@ Widget buildServerImage(
   final borderRadius = (node.props['borderRadius'] as num?)?.toDouble() ?? 0;
   final fit = _parseBoxFit(node.props['fit'] as String?);
 
+  final semanticLabel = node.props['semanticLabel'] as String? ?? 'Image';
+
   Widget image = Image.network(
     url,
     width: width,
@@ -43,7 +45,7 @@ Widget buildServerImage(
     );
   }
 
-  return image;
+  return Semantics(image: true, label: semanticLabel, child: image);
 }
 
 BoxFit _parseBoxFit(String? value) {
