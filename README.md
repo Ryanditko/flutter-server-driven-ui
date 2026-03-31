@@ -11,6 +11,10 @@
 ![Material 3](https://img.shields.io/badge/Material_Design_3-820AD1?logo=materialdesign&logoColor=white)
 ![JSON](https://img.shields.io/badge/JSON_Contracts-000000?logo=json&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
+[![CI](https://github.com/Ryanditko/flutter-backend-driven-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/Ryanditko/flutter-backend-driven-ui/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/Ryanditko/flutter-backend-driven-ui/graph/badge.svg)](https://codecov.io/gh/Ryanditko/flutter-backend-driven-ui)
+
+[Live Demo](https://ryanditko.github.io/flutter-backend-driven-ui/) · [Architecture Docs](docs/ARCHITECTURE.md) · [Mock Server](server/README.md)
 
 </div>
 
@@ -71,11 +75,13 @@ graph TB
     expression["expression/"]
     theme["theme/"]
     validator["validator/"]
+    animation["animation/"]
+    error["error/"]
     utils["utils/"]
   end
   subgraph presentation ["lib/presentation"]
     pages["pages"]
-    widgets["widgets/ ×12"]
+    widgets["widgets/ ×22"]
   end
   subgraph playground ["lib/playground"]
     pg_page["PlaygroundPage"]
@@ -84,6 +90,8 @@ graph TB
   network --> models
   models --> parser
   expression --> parser
+  animation --> parser
+  error --> parser
   parser --> widgets
   widgets --> pages
   pg_widgets --> parser
@@ -93,13 +101,13 @@ graph TB
 
 ## Features
 
-### Components (19 types)
+### Components (22 types)
 
 | Category | Components |
 |----------|-----------|
-| **Layout** | `column` · `row` · `container` · `card` · `listView` · `stack` · `positioned` · `wrap` · `spacer` |
+| **Layout** | `column` · `row` · `container` · `card` · `listView` · `stack` · `positioned` · `wrap` · `spacer` · `responsive` · `expanded` · `flexible` |
 | **Leaf** | `text` · `button` · `image` · `input` · `divider` · `icon` · `chip` · `progress` · `badge` |
-| **Interactive** | `switch` · `checkbox` |
+| **Interactive** | `switch` · `checkbox` · `dropdown` · `tabBar` · `carousel` |
 
 ### Actions (7 types)
 
@@ -111,7 +119,14 @@ graph TB
 - **Dynamic Theming** — per-screen color, typography, and brightness from JSON
 - **Contract Validation** — schema checks before rendering with detailed warnings
 - **Remote API + Caching** — `HttpApiClient` for HTTP fetching, `CachedApiClient` with TTL
-- **Playground** — live JSON editor with split-view preview, screen selector, and auto-render
+- **Playground** — live JSON editor with syntax highlighting, split-view preview, and screen selector
+- **Form Validation** — declarative `required`, `minLength`, `maxLength`, `pattern` rules from JSON
+- **Entrance Animations** — `fadeIn`, `slideUp`, `slideLeft`, `scale` per-component via `props.animation`
+- **Error Boundary** — graceful error handling per component, prevents cascading failures
+- **Accessibility** — `Semantics` labels on all interactive and leaf components
+- **Responsive Layout** — breakpoint system (compact / medium / expanded) with `responsive`, `expanded`, `flexible`
+- **Page Transitions** — animated navigation with fade, slide-up, and horizontal slide routes
+- **Mock Backend** — standalone Dart Shelf server serving contracts via REST API
 
 ---
 
@@ -121,10 +136,11 @@ graph TB
 |--------|-------------|
 | `home` | Welcome page with navigation to all demos and a banner image |
 | `profile` | User profile with avatar, details card, and snackbar action |
-| `form` | Feedback form with text inputs and submit |
+| `form` | Feedback form with validation, entrance animations, and submit |
 | `components_showcase` | Every component type in one screen |
 | `expressions_demo` | Template interpolation and conditional visibility |
 | `theme_demo` | Dark theme applied via JSON contract |
+| `new_components` | Dropdown, tab bar, and carousel showcase |
 
 ---
 
@@ -139,6 +155,16 @@ The landing page offers two modes:
 
 - **App Demo** — navigate through pre-built screens loaded from `assets/screens/`
 - **Playground** — edit JSON contracts and preview rendered output in real-time
+
+### Running the Mock Server
+
+```bash
+cd server
+dart pub get
+dart run bin/server.dart
+```
+
+The server starts on `http://localhost:8080` and serves contracts from `assets/screens/`.
 
 ---
 
@@ -163,20 +189,28 @@ The landing page offers two modes:
       "children": [
         {
           "type": "text",
-          "props": { "content": "Hi, {{user.name}}!", "style": { "fontSize": 24 } }
+          "props": {
+            "content": "Hi, {{user.name}}!",
+            "style": { "fontSize": 24 },
+            "animation": { "type": "fadeIn", "duration": 500 }
+          }
+        },
+        {
+          "type": "input",
+          "id": "email",
+          "props": {
+            "label": "Email",
+            "validation": {
+              "required": true,
+              "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+              "message": "Enter a valid email"
+            }
+          }
         },
         {
           "type": "button",
           "props": { "label": "Go to Profile" },
           "action": { "type": "navigate", "targetScreenId": "profile" }
-        },
-        {
-          "type": "card",
-          "visible": "{{user.name}}",
-          "props": { "padding": 16 },
-          "children": [
-            { "type": "text", "props": { "content": "Visible only when user.name is truthy" } }
-          ]
         }
       ]
     }
@@ -211,6 +245,7 @@ _registry.register('yourType', buildYourComponent);
 ## Documentation
 
 - [Architecture & Schema Specification](docs/ARCHITECTURE.md)
+- [Mock Server](server/README.md)
 
 ---
 
@@ -222,17 +257,9 @@ _registry.register('yourType', buildYourComponent);
 | Framework | ![Flutter](https://img.shields.io/badge/Flutter_3.x-02569B?logo=flutter&logoColor=white) |
 | Design System | ![Material 3](https://img.shields.io/badge/Material_Design_3-820AD1?logo=materialdesign&logoColor=white) |
 | Data Format | ![JSON](https://img.shields.io/badge/JSON-000000?logo=json&logoColor=white) |
+| Backend | ![Shelf](https://img.shields.io/badge/Dart_Shelf-0175C2?logo=dart&logoColor=white) |
+| CI/CD | ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=githubactions&logoColor=white) |
 | Architecture | Server-Driven UI / Backend-Driven Content |
-
----
-
-## Screenshots
-
-> Run the app and capture screenshots to add here.
-
-| Landing | Home | Components | Playground |
-|---------|------|------------|------------|
-| *landing* | *home* | *components showcase* | *playground* |
 
 ---
 
