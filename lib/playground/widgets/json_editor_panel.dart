@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'json_syntax_highlighter.dart';
 
-/// Controller that overrides [buildTextSpan] to return syntax-highlighted
-/// spans directly, keeping native cursor, selection and scroll behaviour.
-class _HighlightingController extends TextEditingController {
-  _HighlightingController({super.text});
+/// [TextEditingController] that returns syntax-highlighted spans from
+/// [buildTextSpan], keeping native cursor, selection and scroll behaviour
+/// without any overlay hacks or secondary controllers.
+class HighlightingController extends TextEditingController {
+  HighlightingController({super.text});
 
   @override
   TextSpan buildTextSpan({
@@ -13,64 +14,21 @@ class _HighlightingController extends TextEditingController {
     TextStyle? style,
     required bool withComposing,
   }) {
-    final spans = JsonSyntaxHighlighter.highlight(text);
-    return TextSpan(style: style, children: spans);
+    return TextSpan(
+      style: style,
+      children: JsonSyntaxHighlighter.highlight(text),
+    );
   }
 }
 
 /// Dark-themed JSON editor with real-time syntax highlighting and line numbers.
-class JsonEditorPanel extends StatefulWidget {
-  final TextEditingController controller;
+///
+/// Expects a [HighlightingController] — the same controller instance the
+/// parent uses to read/write the text. No syncing, no copies, zero lag.
+class JsonEditorPanel extends StatelessWidget {
+  final HighlightingController controller;
 
   const JsonEditorPanel({super.key, required this.controller});
-
-  @override
-  State<JsonEditorPanel> createState() => _JsonEditorPanelState();
-}
-
-class _JsonEditorPanelState extends State<JsonEditorPanel> {
-  late final _HighlightingController _highlightController;
-
-  @override
-  void initState() {
-    super.initState();
-    _highlightController = _HighlightingController(text: widget.controller.text);
-
-    widget.controller.addListener(_syncToHighlight);
-    _highlightController.addListener(_syncFromHighlight);
-  }
-
-  /// Keep the highlighting controller in sync when the parent controller changes
-  /// (e.g. format JSON, load screen, clear).
-  void _syncToHighlight() {
-    if (_updatingFrom) return;
-    _updatingTo = true;
-    if (_highlightController.text != widget.controller.text) {
-      _highlightController.text = widget.controller.text;
-    }
-    _updatingTo = false;
-  }
-
-  /// Push edits from the highlighting controller back to the parent.
-  void _syncFromHighlight() {
-    if (_updatingTo) return;
-    _updatingFrom = true;
-    if (widget.controller.text != _highlightController.text) {
-      widget.controller.text = _highlightController.text;
-    }
-    _updatingFrom = false;
-  }
-
-  bool _updatingTo = false;
-  bool _updatingFrom = false;
-
-  @override
-  void dispose() {
-    widget.controller.removeListener(_syncToHighlight);
-    _highlightController.removeListener(_syncFromHighlight);
-    _highlightController.dispose();
-    super.dispose();
-  }
 
   static const _monoStyle = TextStyle(
     fontFamily: 'monospace',
@@ -93,28 +51,11 @@ class _JsonEditorPanelState extends State<JsonEditorPanel> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Line numbers gutter
-          ValueListenableBuilder<TextEditingValue>(
-            valueListenable: _highlightController,
-            builder: (_, value, _) {
-              final lineCount = '\n'.allMatches(value.text).length + 1;
-              return Container(
-                width: 48,
-                padding: const EdgeInsets.only(top: 16, right: 8),
-                alignment: Alignment.topRight,
-                child: Text(
-                  List.generate(lineCount, (i) => '${i + 1}').join('\n'),
-                  style: _lineNumStyle,
-                  textAlign: TextAlign.right,
-                ),
-              );
-            },
-          ),
+          _LineNumberGutter(controller: controller, style: _lineNumStyle),
           Container(width: 1, color: const Color(0xFF333333)),
-          // Editor
           Expanded(
             child: TextField(
-              controller: _highlightController,
+              controller: controller,
               maxLines: null,
               expands: true,
               textAlignVertical: TextAlignVertical.top,
@@ -130,6 +71,60 @@ class _JsonEditorPanelState extends State<JsonEditorPanel> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Rebuilds only when the line count actually changes, not on every keystroke.
+class _LineNumberGutter extends StatefulWidget {
+  final TextEditingController controller;
+  final TextStyle style;
+
+  const _LineNumberGutter({required this.controller, required this.style});
+
+  @override
+  State<_LineNumberGutter> createState() => _LineNumberGutterState();
+}
+
+class _LineNumberGutterState extends State<_LineNumberGutter> {
+  int _lineCount = 1;
+  String _lineText = '1';
+
+  @override
+  void initState() {
+    super.initState();
+    _updateLineCount();
+    widget.controller.addListener(_onChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onChanged);
+    super.dispose();
+  }
+
+  void _onChanged() {
+    final count = '\n'.allMatches(widget.controller.text).length + 1;
+    if (count != _lineCount) {
+      setState(() {
+        _lineCount = count;
+        _lineText = List.generate(count, (i) => '${i + 1}').join('\n');
+      });
+    }
+  }
+
+  void _updateLineCount() {
+    _lineCount = '\n'.allMatches(widget.controller.text).length + 1;
+    _lineText = List.generate(_lineCount, (i) => '${i + 1}').join('\n');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 48,
+      padding: const EdgeInsets.only(top: 16, right: 8),
+      alignment: Alignment.topRight,
+      child: Text(_lineText, style: widget.style, textAlign: TextAlign.right),
     );
   }
 }

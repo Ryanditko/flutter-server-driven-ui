@@ -21,7 +21,7 @@ class PlaygroundPage extends StatefulWidget {
 }
 
 class _PlaygroundPageState extends State<PlaygroundPage> {
-  final _editorController = TextEditingController();
+  final _editorController = HighlightingController();
   final _client = PlaygroundApiClient();
 
   final _validator = ContractValidator();

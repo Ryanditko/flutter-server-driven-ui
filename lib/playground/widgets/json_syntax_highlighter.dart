@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
 
-/// VS Code dark-theme inspired colors for JSON syntax highlighting.
-abstract final class _JsonColors {
-  static const key = Color(0xFF9CDCFE);
-  static const stringVal = Color(0xFFCE9178);
-  static const number = Color(0xFFB5CEA8);
-  static const bool_ = Color(0xFF569CD6);
-  static const null_ = Color(0xFF569CD6);
-  static const brace = Color(0xFFD4D4D4);
-  static const normal = Color(0xFFD4D4D4);
+/// Pre-allocated, const [TextStyle] instances to avoid per-span allocation.
+abstract final class _JsonStyles {
+  static const key = TextStyle(color: Color(0xFF9CDCFE));
+  static const string = TextStyle(color: Color(0xFFCE9178));
+  static const number = TextStyle(color: Color(0xFFB5CEA8));
+  static const keyword = TextStyle(color: Color(0xFF569CD6));
+  static const brace = TextStyle(color: Color(0xFFD4D4D4));
+  static const normal = TextStyle(color: Color(0xFFD4D4D4));
 }
 
-/// Tokenises a JSON string and returns a list of coloured [TextSpan]s
-/// suitable for a [RichText] / [Text.rich] widget.
+/// Tokenises a JSON string and returns a list of coloured [TextSpan]s.
 ///
-/// Performance: single-pass regex split, no AST parsing. Handles
-/// strings, numbers, booleans, null and structural characters.
+/// Caches the last result so repeated calls with the same input (e.g.
+/// during selection changes or cursor moves) return instantly.
 class JsonSyntaxHighlighter {
   JsonSyntaxHighlighter._();
 
+  static String _cachedSource = '';
+  static List<TextSpan> _cachedSpans = const [];
+
   static final _tokenPattern = RegExp(
-    r'("(?:[^"\\]|\\.)*")\s*:'    // key followed by colon
-    r'|("(?:[^"\\]|\\.)*")'       // string value
-    r'|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)' // number
-    r'|\b(true|false)\b'          // boolean
-    r'|\b(null)\b'                // null
-    r'|([{}[\],:])',              // structural characters
+    r'("(?:[^"\\]|\\.)*")\s*:'
+    r'|("(?:[^"\\]|\\.)*")'
+    r'|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)'
+    r'|\b(true|false)\b'
+    r'|\b(null)\b'
+    r'|([{}[\],:])',
   );
 
   static List<TextSpan> highlight(String source) {
+    if (source == _cachedSource) return _cachedSpans;
+
     final spans = <TextSpan>[];
     var lastEnd = 0;
 
@@ -36,43 +39,38 @@ class JsonSyntaxHighlighter {
       if (match.start > lastEnd) {
         spans.add(TextSpan(
           text: source.substring(lastEnd, match.start),
-          style: const TextStyle(color: _JsonColors.normal),
+          style: _JsonStyles.normal,
         ));
       }
 
       final String text = match[0]!;
-      Color color;
+      final TextStyle style;
 
       if (match[1] != null) {
-        // key: includes the quote-delimited key; colon is part of lookahead
-        color = _JsonColors.key;
+        style = _JsonStyles.key;
       } else if (match[2] != null) {
-        color = _JsonColors.stringVal;
+        style = _JsonStyles.string;
       } else if (match[3] != null) {
-        color = _JsonColors.number;
-      } else if (match[4] != null) {
-        color = _JsonColors.bool_;
-      } else if (match[5] != null) {
-        color = _JsonColors.null_;
+        style = _JsonStyles.number;
+      } else if (match[4] != null || match[5] != null) {
+        style = _JsonStyles.keyword;
       } else {
-        color = _JsonColors.brace;
+        style = _JsonStyles.brace;
       }
 
-      spans.add(TextSpan(
-        text: text,
-        style: TextStyle(color: color),
-      ));
-
+      spans.add(TextSpan(text: text, style: style));
       lastEnd = match.end;
     }
 
     if (lastEnd < source.length) {
       spans.add(TextSpan(
         text: source.substring(lastEnd),
-        style: const TextStyle(color: _JsonColors.normal),
+        style: _JsonStyles.normal,
       ));
     }
 
+    _cachedSource = source;
+    _cachedSpans = spans;
     return spans;
   }
 }
