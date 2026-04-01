@@ -26,6 +26,9 @@ migrate_working_dir/
 # Cursor IDE local config
 .cursor/
 
+# Golden test failures (generated diffs)
+test/golden/failures/
+
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
