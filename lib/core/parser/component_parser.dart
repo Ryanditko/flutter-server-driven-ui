@@ -6,6 +6,7 @@ import '../expression/expression_context.dart';
 import '../expression/template_engine.dart';
 import '../models/screen_contract.dart';
 import '../utils/color_utils.dart';
+import '../utils/parsing_utils.dart' as pu;
 import 'component_registry.dart';
 import '../../presentation/widgets/server_animated_widgets.dart';
 import '../../presentation/widgets/server_badge.dart';
@@ -313,17 +314,44 @@ class ComponentParser {
   ) {
     final padding = _parsePadding(node.props['padding']);
     final bgColor = parseHexColor(node.props['backgroundColor'] as String?);
+    final width = (node.props['width'] as num?)?.toDouble();
+    final height = (node.props['height'] as num?)?.toDouble();
+    final rawDecoration = node.props['decoration'] as Map<String, dynamic>?;
 
-    return Container(
-      padding: padding,
-      color: bgColor,
-      child: node.children.isNotEmpty
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: node.children.map(buildChild).toList(),
-            )
-          : null,
-    );
+    final child = node.children.isNotEmpty
+        ? Column(
+            mainAxisSize: MainAxisSize.min,
+            children: node.children.map(buildChild).toList(),
+          )
+        : null;
+
+    Widget container;
+    if (rawDecoration != null) {
+      container = Container(
+        padding: padding,
+        width: width,
+        height: height,
+        decoration: pu.parseBoxDecoration(rawDecoration),
+        child: child,
+      );
+    } else {
+      container = Container(
+        padding: padding,
+        width: width,
+        height: height,
+        color: bgColor,
+        child: child,
+      );
+    }
+
+    if (node.action != null) {
+      container = GestureDetector(
+        onTap: () => handleAction(context, node.action),
+        child: container,
+      );
+    }
+
+    return container;
   }
 
   Widget _buildCard(
