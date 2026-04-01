@@ -81,7 +81,7 @@ graph TB
   end
   subgraph presentation ["lib/presentation"]
     pages["pages"]
-    widgets["widgets/ ×22"]
+    widgets["widgets/ ×103"]
   end
   subgraph playground ["lib/playground"]
     pg_page["PlaygroundPage"]
@@ -101,13 +101,23 @@ graph TB
 
 ## Features
 
-### Components (22 types)
+### Components (103 types)
 
 | Category | Components |
 |----------|-----------|
-| **Layout** | `column` · `row` · `container` · `card` · `listView` · `stack` · `positioned` · `wrap` · `spacer` · `responsive` · `expanded` · `flexible` |
+| **Core Layout** | `column` · `row` · `container` · `card` · `listView` · `stack` · `positioned` · `wrap` · `spacer` · `responsive` · `expanded` · `flexible` |
+| **Layout Wrappers** | `center` · `align` · `padding` · `sizedBox` · `constrainedBox` · `fittedBox` · `fractionallySizedBox` · `intrinsicHeight` · `intrinsicWidth` · `limitedBox` · `overflowBox` · `aspectRatio` · `baseline` · `opacity` · `clipRRect` · `clipOval` · `safeArea` · `rotatedBox` · `ignorePointer` · `absorbPointer` · `offstage` · `visibility` |
+| **Decorators** | `material` · `hero` · `decoratedBox` · `indexedStack` · `transform` · `backdropFilter` · `banner` |
+| **Scrollables** | `scrollView` · `gridView` · `pageView` · `customScrollView` · `sliverList` · `sliverGrid` |
+| **Interactives** | `inkWell` · `gestureDetector` · `tooltip` · `dismissible` · `draggable` · `longPressDraggable` |
+| **Animated** | `animatedContainer` · `animatedOpacity` · `animatedCrossFade` · `animatedSwitcher` · `animatedAlign` · `animatedPadding` · `animatedPositioned` · `animatedSize` · `animatedScale` |
+| **Tiles** | `listTile` · `expansionTile` · `switchListTile` · `checkboxListTile` · `radioListTile` |
+| **Tables** | `table` · `tableRow` · `tableCell` · `dataTable` |
+| **Text Variants** | `selectableText` · `richText` · `defaultTextStyle` |
+| **Button Variants** | `textButton` · `outlinedButton` · `iconButton` · `floatingActionButton` · `segmentedButton` |
+| **Media & Display** | `placeholder` · `circleAvatar` · `verticalDivider` · `popupMenuButton` · `searchBar` · `searchAnchor` · `tooltip` |
 | **Leaf** | `text` · `button` · `image` · `input` · `divider` · `icon` · `chip` · `progress` · `badge` |
-| **Interactive** | `switch` · `checkbox` · `dropdown` · `tabBar` · `carousel` |
+| **Interactive Inputs** | `switch` · `checkbox` · `dropdown` · `tabBar` · `carousel` · `slider` · `rangeSlider` · `radio` |
 
 ### Actions (7 types)
 
@@ -137,10 +147,11 @@ graph TB
 | `home` | Welcome page with navigation to all demos and a banner image |
 | `profile` | User profile with avatar, details card, and snackbar action |
 | `form` | Feedback form with validation, entrance animations, and submit |
-| `components_showcase` | Every component type in one screen |
+| `components_showcase` | Every core component type in one screen |
 | `expressions_demo` | Template interpolation and conditional visibility |
 | `theme_demo` | Dark theme applied via JSON contract |
 | `new_components` | Dropdown, tab bar, and carousel showcase |
+| `advanced_components` | Layout wrappers, decorators, tiles, buttons, text variants, and misc widgets |
 
 ---
 
@@ -245,6 +256,7 @@ _registry.register('yourType', buildYourComponent);
 ## Documentation
 
 - [Architecture & Schema Specification](docs/ARCHITECTURE.md)
+- [Component Reference Catalog](docs/COMPONENTS.md)
 - [Mock Server](server/README.md)
 
 ---
