@@ -485,7 +485,7 @@ Any string value in `props` containing `{{expression}}` is interpolated at rende
 
 ```json
 {
-  "context": { "user": { "name": "Jane" } },
+  "context": { "user": { "name": "Ryanditko" } },
   "screen": {
     "root": {
       "type": "text",
