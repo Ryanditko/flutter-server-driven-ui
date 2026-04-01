@@ -1,0 +1,270 @@
+{
+  "schemaVersion": "1.0",
+  "screen": {
+    "id": "advanced_components",
+    "title": "Advanced Components",
+    "root": {
+      "type": "column",
+      "props": {
+        "crossAxisAlignment": "stretch",
+        "padding": { "top": 24, "bottom": 32, "left": 24, "right": 24 }
+      },
+      "children": [
+        {
+          "type": "text",
+          "props": {
+            "content": "Layout Wrappers & Decorators",
+            "style": { "fontSize": 24, "fontWeight": "bold" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+
+        {
+          "type": "text",
+          "props": {
+            "content": "Center + ClipRRect",
+            "style": { "fontSize": 16, "fontWeight": "w600" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "center",
+          "children": [
+            {
+              "type": "clipRRect",
+              "props": { "borderRadius": 16 },
+              "children": [
+                {
+                  "type": "container",
+                  "props": {
+                    "padding": 16,
+                    "decoration": {
+                      "color": "#E3F2FD",
+                      "borderRadius": 16
+                    }
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": { "content": "Clipped rounded content" }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        { "type": "divider", "props": { "height": 32 } },
+
+        {
+          "type": "text",
+          "props": {
+            "content": "Opacity",
+            "style": { "fontSize": 16, "fontWeight": "w600" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "row",
+          "props": { "mainAxisAlignment": "spaceEvenly" },
+          "children": [
+            {
+              "type": "opacity",
+              "props": { "opacity": 1.0 },
+              "children": [
+                {
+                  "type": "chip",
+                  "props": { "label": "100%", "backgroundColor": "#2196F3" }
+                }
+              ]
+            },
+            {
+              "type": "opacity",
+              "props": { "opacity": 0.6 },
+              "children": [
+                {
+                  "type": "chip",
+                  "props": { "label": "60%", "backgroundColor": "#2196F3" }
+                }
+              ]
+            },
+            {
+              "type": "opacity",
+              "props": { "opacity": 0.3 },
+              "children": [
+                {
+                  "type": "chip",
+                  "props": { "label": "30%", "backgroundColor": "#2196F3" }
+                }
+              ]
+            }
+          ]
+        },
+
+        { "type": "divider", "props": { "height": 32 } },
+
+        {
+          "type": "text",
+          "props": {
+            "content": "Transform (Rotate & Scale)",
+            "style": { "fontSize": 16, "fontWeight": "w600" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "row",
+          "props": { "mainAxisAlignment": "spaceEvenly" },
+          "children": [
+            {
+              "type": "transform",
+              "props": { "transformType": "rotate", "angle": 0.3 },
+              "children": [
+                { "type": "icon", "props": { "name": "star", "size": 40, "color": "#FF9800" } }
+              ]
+            },
+            {
+              "type": "transform",
+              "props": { "transformType": "scale", "scale": 1.5 },
+              "children": [
+                { "type": "icon", "props": { "name": "favorite", "size": 32, "color": "#E91E63" } }
+              ]
+            }
+          ]
+        },
+
+        { "type": "divider", "props": { "height": 32 } },
+
+        {
+          "type": "text",
+          "props": {
+            "content": "Tiles",
+            "style": { "fontSize": 16, "fontWeight": "w600" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "listTile",
+          "props": {
+            "title": "Settings",
+            "subtitle": "Manage your preferences",
+            "leadingIcon": "settings"
+          }
+        },
+        {
+          "type": "expansionTile",
+          "props": { "title": "More Options", "initiallyExpanded": false },
+          "children": [
+            {
+              "type": "padding",
+              "props": { "padding": 16 },
+              "children": [
+                { "type": "text", "props": { "content": "Hidden content revealed on expand." } }
+              ]
+            }
+          ]
+        },
+
+        { "type": "divider", "props": { "height": 32 } },
+
+        {
+          "type": "text",
+          "props": {
+            "content": "Button Variants",
+            "style": { "fontSize": 16, "fontWeight": "w600" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "row",
+          "props": { "mainAxisAlignment": "spaceEvenly" },
+          "children": [
+            {
+              "type": "textButton",
+              "props": { "label": "Text" },
+              "action": { "type": "snackbar", "message": "Text button tapped" }
+            },
+            {
+              "type": "outlinedButton",
+              "props": { "label": "Outlined" },
+              "action": { "type": "snackbar", "message": "Outlined button tapped" }
+            },
+            {
+              "type": "iconButton",
+              "props": { "icon": "thumb_up", "tooltip": "Like" },
+              "action": { "type": "snackbar", "message": "Liked!" }
+            }
+          ]
+        },
+
+        { "type": "divider", "props": { "height": 32 } },
+
+        {
+          "type": "text",
+          "props": {
+            "content": "Text Variants",
+            "style": { "fontSize": 16, "fontWeight": "w600" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "selectableText",
+          "props": {
+            "content": "Long-press to select this text and copy it."
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "richText",
+          "props": {
+            "spans": [
+              { "text": "Bold ", "fontWeight": "bold" },
+              { "text": "and ", "color": "#666666" },
+              { "text": "colored", "color": "#E91E63", "fontWeight": "w600" },
+              { "text": " in one line." }
+            ]
+          }
+        },
+
+        { "type": "divider", "props": { "height": 32 } },
+
+        {
+          "type": "text",
+          "props": {
+            "content": "Miscellaneous",
+            "style": { "fontSize": 16, "fontWeight": "w600" }
+          }
+        },
+        { "type": "spacer", "props": { "height": 8 } },
+        {
+          "type": "row",
+          "props": { "mainAxisAlignment": "spaceEvenly" },
+          "children": [
+            {
+              "type": "circleAvatar",
+              "props": { "label": "AB", "radius": 28, "backgroundColor": "#7C4DFF" }
+            },
+            {
+              "type": "circleAvatar",
+              "props": { "icon": "person", "radius": 28, "backgroundColor": "#00BCD4" }
+            },
+            {
+              "type": "circleAvatar",
+              "props": { "label": "ZZ", "radius": 28, "backgroundColor": "#FF5722" }
+            }
+          ]
+        },
+        { "type": "spacer", "props": { "height": 12 } },
+        {
+          "type": "center",
+          "children": [
+            {
+              "type": "placeholder",
+              "props": { "width": 200, "height": 80 }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
