@@ -21,20 +21,17 @@ Widget buildServerButton(
   return Semantics(
     button: true,
     label: label,
-    child: SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: bgColor,
-          foregroundColor: textColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: bgColor,
+        foregroundColor: textColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
         ),
-        onPressed: () => handleAction(context, node.action),
-        child: Text(label, style: const TextStyle(fontSize: 16)),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       ),
+      onPressed: () => handleAction(context, node.action),
+      child: Text(label, style: const TextStyle(fontSize: 15)),
     ),
   );
 }
