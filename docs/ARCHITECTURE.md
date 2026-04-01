@@ -120,7 +120,7 @@ flowchart LR
 
 ---
 
-## Component Types (103 total)
+## Component Types (106 total)
 
 ### Core Layout Components (12)
 

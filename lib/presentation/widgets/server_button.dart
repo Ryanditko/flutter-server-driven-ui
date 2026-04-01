@@ -45,8 +45,10 @@ void handleAction(BuildContext context, ActionDef? action) {
 
   switch (action.type) {
     case 'navigate':
-      if (action.targetScreenId != null) {
+      if (action.targetScreenId != null && action.targetScreenId!.isNotEmpty) {
         Navigator.of(context).pushNamed('/screen/${action.targetScreenId}');
+      } else {
+        debugPrint('navigate action missing targetScreenId');
       }
     case 'goBack':
       if (Navigator.of(context).canPop()) Navigator.of(context).pop();
@@ -67,7 +69,15 @@ void handleAction(BuildContext context, ActionDef? action) {
       if (url.isNotEmpty) {
         final uri = Uri.tryParse(url);
         if (uri != null) {
-          launchUrl(uri, mode: LaunchMode.externalApplication);
+          launchUrl(uri, mode: LaunchMode.externalApplication).catchError((e) {
+            debugPrint('Failed to open URL "$url": $e');
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Could not open $url')),
+              );
+            }
+            return false;
+          });
         }
       }
     case 'showDialog':

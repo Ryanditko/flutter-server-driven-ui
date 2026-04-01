@@ -161,6 +161,29 @@ Widget buildServerAnimatedSize(
   );
 }
 
+Widget buildServerAnimatedScale(
+  ComponentNode node,
+  BuildContext context,
+  Widget Function(ComponentNode) buildChild,
+) {
+  final scale = (node.props['scale'] as num?)?.toDouble() ?? 1.0;
+  final duration = parseDuration(node.props['duration']);
+  final curve = parseCurve(node.props['curve'] as String?);
+  final alignment = parseAlignment(node.props['alignment'] as String?);
+
+  return TweenAnimationBuilder<double>(
+    tween: Tween(begin: 1.0, end: scale.clamp(0.0, 10.0)),
+    duration: duration,
+    curve: curve,
+    builder: (context, value, child) => Transform.scale(
+      scale: value,
+      alignment: alignment,
+      child: child,
+    ),
+    child: buildSingleChild(node, buildChild),
+  );
+}
+
 Widget buildServerFadeTransition(
   ComponentNode node,
   BuildContext context,

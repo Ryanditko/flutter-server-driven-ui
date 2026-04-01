@@ -16,7 +16,7 @@ class ContractValidator {
     'constrainedBox', 'fractionalSizedBox', 'safeArea', 'intrinsicHeight',
     'intrinsicWidth', 'limitedBox', 'overflowBox', 'offstage', 'ignorePointer',
     'absorbPointer', 'clipRRect', 'clipOval', 'opacity', 'rotatedBox',
-    'coloredBox', 'baseline',
+    'coloredBox', 'baseline', 'visibility',
     // Decorators
     'material', 'hero', 'indexedStack', 'decoratedBox', 'transform',
     'backdropFilter', 'banner',
@@ -29,7 +29,7 @@ class ContractValidator {
     // Animated
     'animatedContainer', 'animatedOpacity', 'animatedCrossFade',
     'animatedSwitcher', 'animatedAlign', 'animatedPadding',
-    'animatedPositioned', 'animatedSize', 'fadeTransition',
+    'animatedPositioned', 'animatedSize', 'animatedScale', 'fadeTransition',
     // Tiles & tables
     'expansionTile', 'table', 'tableRow', 'tableCell', 'defaultTextStyle',
   };
@@ -44,7 +44,7 @@ class ContractValidator {
     'image', 'divider', 'verticalDivider', 'icon', 'chip', 'progress',
     'linearProgressIndicator', 'circularProgressIndicator',
     'badge', 'placeholder', 'circleAvatar', 'listTile',
-    'popupMenuButton', 'searchBar', 'dataTable',
+    'popupMenuButton', 'searchBar', 'searchAnchor', 'dataTable',
     // Input
     'input', 'spacer',
     // Interactive input

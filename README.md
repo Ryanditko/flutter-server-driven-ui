@@ -81,7 +81,7 @@ graph TB
   end
   subgraph presentation ["lib/presentation"]
     pages["pages"]
-    widgets["widgets/ ×103"]
+    widgets["widgets/ ×106"]
   end
   subgraph playground ["lib/playground"]
     pg_page["PlaygroundPage"]
@@ -101,7 +101,7 @@ graph TB
 
 ## Features
 
-### Components (103 types)
+### Components (106 types)
 
 | Category | Components |
 |----------|-----------|
@@ -133,7 +133,7 @@ graph TB
 - **Form Validation** — declarative `required`, `minLength`, `maxLength`, `pattern` rules from JSON
 - **Entrance Animations** — `fadeIn`, `slideUp`, `slideLeft`, `scale` per-component via `props.animation`
 - **Error Boundary** — graceful error handling per component, prevents cascading failures
-- **Accessibility** — `Semantics` labels on all interactive and leaf components
+- **Accessibility** — `Semantics` labels on interactive components (buttons, chips, inputs, switches, checkboxes), text variants, media (images, icons, avatars, badges, progress indicators, dividers), and interactive wrappers (inkWell, gestureDetector)
 - **Responsive Layout** — breakpoint system (compact / medium / expanded) with `responsive`, `expanded`, `flexible`
 - **Page Transitions** — animated navigation with fade, slide-up, and horizontal slide routes
 - **Mock Backend** — standalone Dart Shelf server serving contracts via REST API

@@ -98,6 +98,7 @@ class ComponentParser {
     _registry.register('rotatedBox', buildServerRotatedBox);
     _registry.register('coloredBox', buildServerColoredBox);
     _registry.register('baseline', buildServerBaseline);
+    _registry.register('visibility', buildServerVisibility);
 
     // Layout – decorators
     _registry.register('material', buildServerMaterial);
@@ -133,6 +134,7 @@ class ComponentParser {
     _registry.register('animatedPadding', buildServerAnimatedPadding);
     _registry.register('animatedPositioned', buildServerAnimatedPositioned);
     _registry.register('animatedSize', buildServerAnimatedSize);
+    _registry.register('animatedScale', buildServerAnimatedScale);
     _registry.register('fadeTransition', buildServerFadeTransition);
 
     // Layout – tiles
@@ -174,6 +176,7 @@ class ComponentParser {
     _registry.register('listTile', buildServerListTile);
     _registry.register('popupMenuButton', buildServerPopupMenuButton);
     _registry.register('searchBar', buildServerSearchBar);
+    _registry.register('searchAnchor', buildServerSearchAnchor);
     _registry.register('dataTable', buildServerDataTable);
 
     // Leaf – input
@@ -360,11 +363,16 @@ class ComponentParser {
     Widget Function(ComponentNode) buildChild,
   ) {
     final padding = _parsePadding(node.props['padding']);
+    final margin = _parsePadding(node.props['margin']);
     final elevation = (node.props['elevation'] as num?)?.toDouble() ?? 1;
+    final color = parseHexColor(node.props['color'] as String?);
+    final borderRadius = (node.props['borderRadius'] as num?)?.toDouble() ?? 12;
 
-    return Card(
+    Widget card = Card(
       elevation: elevation,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: color,
+      margin: margin,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
       child: Padding(
         padding: padding ?? EdgeInsets.zero,
         child: node.children.isNotEmpty
@@ -376,6 +384,15 @@ class ComponentParser {
             : const SizedBox.shrink(),
       ),
     );
+
+    if (node.action != null) {
+      card = GestureDetector(
+        onTap: () => handleAction(context, node.action),
+        child: card,
+      );
+    }
+
+    return card;
   }
 
   Widget _buildListView(

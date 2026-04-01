@@ -302,6 +302,25 @@ Widget buildServerColoredBox(
   );
 }
 
+Widget buildServerVisibility(
+  ComponentNode node,
+  BuildContext context,
+  Widget Function(ComponentNode) buildChild,
+) {
+  final visible = node.props['visible'] as bool? ?? true;
+  final maintainSize = node.props['maintainSize'] as bool? ?? false;
+  final maintainState = node.props['maintainState'] as bool? ?? false;
+  final maintainAnimation = node.props['maintainAnimation'] as bool? ?? false;
+
+  return Visibility(
+    visible: visible,
+    maintainSize: maintainSize,
+    maintainState: maintainState,
+    maintainAnimation: maintainAnimation,
+    child: buildSingleChild(node, buildChild),
+  );
+}
+
 Widget buildServerBaseline(
   ComponentNode node,
   BuildContext context,

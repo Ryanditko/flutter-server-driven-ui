@@ -27,13 +27,19 @@ Widget buildServerProgress(
       indicator = SizedBox(width: size, height: size, child: indicator);
     }
 
-    return Center(child: indicator);
+    return Semantics(
+      label: value != null ? 'Progress ${(value * 100).toInt()}%' : 'Loading',
+      child: Center(child: indicator),
+    );
   }
 
-  return LinearProgressIndicator(
-    value: value,
-    color: color,
-    backgroundColor: trackColor,
-    minHeight: strokeWidth,
+  return Semantics(
+    label: value != null ? 'Progress ${(value * 100).toInt()}%' : 'Loading',
+    child: LinearProgressIndicator(
+      value: value,
+      color: color,
+      backgroundColor: trackColor,
+      minHeight: strokeWidth,
+    ),
   );
 }

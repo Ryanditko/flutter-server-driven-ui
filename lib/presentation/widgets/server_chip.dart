@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/models/screen_contract.dart';
 import '../../core/utils/color_utils.dart';
+import 'server_button.dart';
 
 Widget buildServerChip(
   ComponentNode node,
@@ -15,27 +16,47 @@ Widget buildServerChip(
   final outlined = node.props['outlined'] as bool? ?? false;
 
   if (outlined) {
-    return OutlinedButton(
-      onPressed: node.action != null ? () {} : null,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: textColor,
-        side: bgColor != null ? BorderSide(color: bgColor) : null,
-        shape: const StadiumBorder(),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Semantics(
+      button: node.action != null,
+      label: label,
+      child: OutlinedButton(
+        onPressed: node.action != null ? () => handleAction(context, node.action) : null,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: textColor,
+          side: bgColor != null ? BorderSide(color: bgColor) : null,
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        ),
+        child: Text(label),
       ),
-      child: Text(label),
     );
   }
 
-  return Chip(
-    avatar: avatar != null
-        ? CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: Text(avatar, style: const TextStyle(fontSize: 14)),
+  return Semantics(
+    label: label,
+    child: node.action != null
+        ? ActionChip(
+            avatar: avatar != null
+                ? CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: Text(avatar, style: const TextStyle(fontSize: 14)),
+                  )
+                : null,
+            label: Text(label),
+            backgroundColor: bgColor,
+            labelStyle: textColor != null ? TextStyle(color: textColor) : null,
+            onPressed: () => handleAction(context, node.action),
           )
-        : null,
-    label: Text(label),
-    backgroundColor: bgColor,
-    labelStyle: textColor != null ? TextStyle(color: textColor) : null,
+        : Chip(
+            avatar: avatar != null
+                ? CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    child: Text(avatar, style: const TextStyle(fontSize: 14)),
+                  )
+                : null,
+            label: Text(label),
+            backgroundColor: bgColor,
+            labelStyle: textColor != null ? TextStyle(color: textColor) : null,
+          ),
   );
 }

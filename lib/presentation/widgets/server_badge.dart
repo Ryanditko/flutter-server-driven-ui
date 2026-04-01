@@ -16,14 +16,20 @@ Widget buildServerBadge(
   final child = node.children.isNotEmpty ? buildChild(node.children.first) : const SizedBox.shrink();
 
   if (isSmall) {
-    return Badge(backgroundColor: bgColor, child: child);
+    return Semantics(
+      label: 'Badge',
+      child: Badge(backgroundColor: bgColor, child: child),
+    );
   }
 
-  return Badge(
-    label: label != null
-        ? Text(label, style: TextStyle(color: textColor ?? Colors.white, fontSize: 11))
-        : null,
-    backgroundColor: bgColor,
-    child: child,
+  return Semantics(
+    label: label != null ? 'Badge: $label' : 'Badge',
+    child: Badge(
+      label: label != null
+          ? Text(label, style: TextStyle(color: textColor ?? Colors.white, fontSize: 11))
+          : null,
+      backgroundColor: bgColor,
+      child: child,
+    ),
   );
 }

@@ -5,6 +5,7 @@ import '../core/models/screen_contract.dart';
 import '../core/network/api_client.dart';
 import '../core/parser/component_parser.dart';
 import '../core/theme/theme_contract.dart';
+import '../core/validator/contract_validator.dart';
 import 'widgets/server_button.dart';
 
 /// A page that fetches a screen contract by [screenId] and renders
@@ -91,6 +92,12 @@ class _DynamicScreenPageState extends InputCollectorState<DynamicScreenPage> {
         }
 
         final contract = snapshot.data!;
+
+        final issues = ContractValidator().validate(contract);
+        for (final issue in issues) {
+          debugPrint('[ContractValidator] $issue');
+        }
+
         final parser = ComponentParser(
           onInputChanged: (id, value) => _inputValues[id] = value,
           expressionContext: ExpressionContext(contract.context),

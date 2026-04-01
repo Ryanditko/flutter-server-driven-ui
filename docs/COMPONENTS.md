@@ -107,6 +107,7 @@ All animated types accept `duration` (ms) and `curve`.
 | `animatedPositioned` | yes (1) | `top`, `bottom`, `left`, `right`, `width`, `height` |
 | `animatedSize` | yes (1) | `alignment` |
 | `animatedScale` | yes (1) | `scale`, `alignment` |
+| `fadeTransition` | yes (1) | `opacity` |
 
 ---
 

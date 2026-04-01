@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/models/screen_contract.dart';
 import '../../core/utils/color_utils.dart';
 import '../../core/utils/parsing_utils.dart';
+import 'server_button.dart';
 import 'server_icon.dart' show resolveIcon;
 
 Widget buildServerPlaceholder(
@@ -56,39 +57,6 @@ Widget buildServerCircleAvatar(
   );
 }
 
-Widget buildServerCard(
-  ComponentNode node,
-  BuildContext context,
-  Widget Function(ComponentNode) buildChild,
-) {
-  final elevation = (node.props['elevation'] as num?)?.toDouble() ?? 1;
-  final color = parseHexColor(node.props['color'] as String?);
-  final shadowColor = parseHexColor(node.props['shadowColor'] as String?);
-  final surfaceTintColor = parseHexColor(node.props['surfaceTintColor'] as String?);
-  final borderRadius = parseBorderRadius(node.props['borderRadius']) ?? BorderRadius.circular(12);
-  final padding = parsePadding(node.props['padding']);
-  final margin = parsePadding(node.props['margin']);
-
-  return Card(
-    elevation: elevation,
-    color: color,
-    shadowColor: shadowColor,
-    surfaceTintColor: surfaceTintColor,
-    margin: margin,
-    shape: RoundedRectangleBorder(borderRadius: borderRadius),
-    child: Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: node.children.isNotEmpty
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: buildAllChildren(node, buildChild),
-            )
-          : const SizedBox.shrink(),
-    ),
-  );
-}
-
 Widget buildServerVerticalDivider(
   ComponentNode node,
   BuildContext context,
@@ -129,7 +97,7 @@ Widget buildServerPopupMenuButton(
     icon: icon != null ? Icon(resolveIcon(icon)) : null,
     tooltip: tooltip,
     itemBuilder: (_) => items,
-    onSelected: (_) {},
+    onSelected: (_) => handleAction(context, node.action),
   );
 }
 
@@ -151,6 +119,39 @@ Widget buildServerSearchBar(
   );
 }
 
+Widget buildServerSearchAnchor(
+  ComponentNode node,
+  BuildContext context,
+  Widget Function(ComponentNode) buildChild,
+) {
+  final hintText = node.props['hintText'] as String? ?? 'Search...';
+  final suggestions =
+      (node.props['suggestions'] as List<dynamic>?)?.cast<String>() ?? const <String>[];
+
+  return SearchAnchor(
+    builder: (context, controller) {
+      return SearchBar(
+        controller: controller,
+        hintText: hintText,
+        onTap: () => controller.openView(),
+        onChanged: (_) => controller.openView(),
+        leading: const Icon(Icons.search),
+      );
+    },
+    suggestionsBuilder: (context, controller) {
+      final query = controller.text.toLowerCase();
+      final filtered =
+          suggestions.where((s) => s.toLowerCase().contains(query)).toList();
+      return filtered.map((s) => ListTile(
+            title: Text(s),
+            onTap: () {
+              controller.closeView(s);
+            },
+          ));
+    },
+  );
+}
+
 Widget buildServerLinearProgressIndicator(
   ComponentNode node,
   BuildContext context,
@@ -162,12 +163,15 @@ Widget buildServerLinearProgressIndicator(
   final minHeight = (node.props['minHeight'] as num?)?.toDouble();
   final borderRadius = parseBorderRadius(node.props['borderRadius']);
 
-  return LinearProgressIndicator(
-    value: value,
-    color: color,
-    backgroundColor: bgColor,
-    minHeight: minHeight,
-    borderRadius: borderRadius,
+  return Semantics(
+    label: value != null ? 'Progress ${(value * 100).toInt()}%' : 'Loading',
+    child: LinearProgressIndicator(
+      value: value,
+      color: color,
+      backgroundColor: bgColor,
+      minHeight: minHeight,
+      borderRadius: borderRadius,
+    ),
   );
 }
 
@@ -181,10 +185,13 @@ Widget buildServerCircularProgressIndicator(
   final bgColor = parseHexColor(node.props['backgroundColor'] as String?);
   final strokeWidth = (node.props['strokeWidth'] as num?)?.toDouble() ?? 4;
 
-  return CircularProgressIndicator(
-    value: value,
-    color: color,
-    backgroundColor: bgColor,
-    strokeWidth: strokeWidth,
+  return Semantics(
+    label: value != null ? 'Progress ${(value * 100).toInt()}%' : 'Loading',
+    child: CircularProgressIndicator(
+      value: value,
+      color: color,
+      backgroundColor: bgColor,
+      strokeWidth: strokeWidth,
+    ),
   );
 }

@@ -14,11 +14,14 @@ Widget buildServerDivider(
   final indent = (node.props['indent'] as num?)?.toDouble() ?? 0;
   final endIndent = (node.props['endIndent'] as num?)?.toDouble() ?? 0;
 
-  return Divider(
-    height: height,
-    thickness: thickness,
-    color: color,
-    indent: indent,
-    endIndent: endIndent,
+  return Semantics(
+    label: 'Divider',
+    child: Divider(
+      height: height,
+      thickness: thickness,
+      color: color,
+      indent: indent,
+      endIndent: endIndent,
+    ),
   );
 }

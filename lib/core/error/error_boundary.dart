@@ -3,13 +3,8 @@ import 'package:flutter/material.dart';
 /// Catches build-time errors in a subtree and renders a graceful fallback
 /// instead of crashing the entire widget tree.
 ///
-/// Usage in [ComponentParser]:
-/// ```dart
-/// return ErrorBoundary(
-///   nodeType: node.type,
-///   child: builtWidget,
-/// );
-/// ```
+/// Wraps the child build in a try/catch within its own [Builder] to
+/// intercept synchronous exceptions during widget construction.
 class ErrorBoundary extends StatefulWidget {
   final Widget child;
   final String nodeType;
@@ -28,36 +23,49 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   Object? _error;
 
   @override
+  void didUpdateWidget(ErrorBoundary oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.child != widget.child || oldWidget.nodeType != widget.nodeType) {
+      _error = null;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (_error != null) {
       return _ErrorFallback(nodeType: widget.nodeType, error: _error!);
     }
 
-    return _ErrorCatcher(
-      onError: (error) {
-        if (mounted) setState(() => _error = error);
-      },
-      child: widget.child,
-    );
+    try {
+      return _SafeBuilder(
+        builder: (_) => widget.child,
+        onError: (error) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) setState(() => _error = error);
+          });
+        },
+      );
+    } catch (e) {
+      return _ErrorFallback(nodeType: widget.nodeType, error: e);
+    }
   }
 }
 
-class _ErrorCatcher extends StatelessWidget {
-  final Widget child;
+class _SafeBuilder extends StatelessWidget {
+  final Widget Function(BuildContext) builder;
   final void Function(Object error) onError;
 
-  const _ErrorCatcher({required this.child, required this.onError});
+  const _SafeBuilder({required this.builder, required this.onError});
 
   @override
   Widget build(BuildContext context) {
-    Widget result;
     try {
-      result = child;
+      return builder(context);
     } catch (e) {
+      debugPrint('ErrorBoundary caught: $e');
       onError(e);
       return const SizedBox.shrink();
     }
-    return result;
   }
 }
 
