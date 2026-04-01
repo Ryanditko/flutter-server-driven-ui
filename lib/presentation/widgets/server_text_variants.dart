@@ -16,14 +16,17 @@ Widget buildServerSelectableText(
   final textAlign = parseTextAlign(node.props['textAlign'] as String?);
   final maxLines = (node.props['maxLines'] as num?)?.toInt();
 
-  return SelectableText(
-    content,
-    textAlign: textAlign,
-    maxLines: maxLines,
-    style: TextStyle(
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: color,
+  return Semantics(
+    label: content,
+    child: SelectableText(
+      content,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+      ),
     ),
   );
 }
@@ -56,13 +59,18 @@ Widget buildServerRichText(
   final maxLines = (node.props['maxLines'] as num?)?.toInt();
   final overflow = parseTextOverflow(node.props['overflow'] as String?);
 
-  return RichText(
-    textAlign: textAlign ?? TextAlign.start,
-    maxLines: maxLines,
-    overflow: overflow ?? TextOverflow.clip,
-    text: TextSpan(
-      style: DefaultTextStyle.of(context).style,
-      children: spans,
+  final semanticLabel = spans.map((s) => s.text ?? '').join();
+
+  return Semantics(
+    label: semanticLabel,
+    child: RichText(
+      textAlign: textAlign ?? TextAlign.start,
+      maxLines: maxLines,
+      overflow: overflow ?? TextOverflow.clip,
+      text: TextSpan(
+        style: DefaultTextStyle.of(context).style,
+        children: spans,
+      ),
     ),
   );
 }
