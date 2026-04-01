@@ -16,13 +16,17 @@ Widget buildServerTextButton(
   final fontSize = (node.props['fontSize'] as num?)?.toDouble();
   final padding = parsePadding(node.props['padding']);
 
-  return TextButton(
-    onPressed: node.action != null ? () => handleAction(context, node.action) : null,
-    style: TextButton.styleFrom(
-      foregroundColor: textColor,
-      padding: padding,
+  return Semantics(
+    button: true,
+    label: label,
+    child: TextButton(
+      onPressed: node.action != null ? () => handleAction(context, node.action) : null,
+      style: TextButton.styleFrom(
+        foregroundColor: textColor,
+        padding: padding,
+      ),
+      child: Text(label, style: TextStyle(fontSize: fontSize)),
     ),
-    child: Text(label, style: TextStyle(fontSize: fontSize)),
   );
 }
 
@@ -37,15 +41,19 @@ Widget buildServerOutlinedButton(
   final borderRadius = (node.props['borderRadius'] as num?)?.toDouble() ?? 8;
   final padding = parsePadding(node.props['padding']);
 
-  return OutlinedButton(
-    onPressed: node.action != null ? () => handleAction(context, node.action) : null,
-    style: OutlinedButton.styleFrom(
-      foregroundColor: textColor,
-      side: borderColor != null ? BorderSide(color: borderColor) : null,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
-      padding: padding,
+  return Semantics(
+    button: true,
+    label: label,
+    child: OutlinedButton(
+      onPressed: node.action != null ? () => handleAction(context, node.action) : null,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: textColor,
+        side: borderColor != null ? BorderSide(color: borderColor) : null,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
+        padding: padding,
+      ),
+      child: Text(label),
     ),
-    child: Text(label),
   );
 }
 
