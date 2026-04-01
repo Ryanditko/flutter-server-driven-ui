@@ -120,9 +120,9 @@ flowchart LR
 
 ---
 
-## Component Types
+## Component Types (103 total)
 
-### Layout Components (9)
+### Core Layout Components (12)
 
 These components contain `children` and control layout.
 
@@ -137,6 +137,9 @@ graph LR
   positioned["positioned"]
   wrap["wrap"]
   spacer["spacer"]
+  responsive["responsive"]
+  expanded["expanded"]
+  flexible["flexible"]
   style column fill:#E8EAF6
   style row fill:#E8EAF6
   style container fill:#E8EAF6
@@ -146,6 +149,9 @@ graph LR
   style positioned fill:#E8EAF6
   style wrap fill:#E8EAF6
   style spacer fill:#E8EAF6
+  style responsive fill:#E8EAF6
+  style expanded fill:#E8EAF6
+  style flexible fill:#E8EAF6
 ```
 
 #### `column` / `row`
@@ -208,6 +214,66 @@ graph LR
 | `height` | `number` | `16` | Vertical space |
 | `width` | `number` | none | Horizontal space |
 
+### Layout Wrappers (22)
+
+Single-child wrappers that adjust positioning, sizing, and clipping.
+
+`center` · `align` · `padding` · `sizedBox` · `constrainedBox` · `fittedBox` · `fractionallySizedBox` · `intrinsicHeight` · `intrinsicWidth` · `limitedBox` · `overflowBox` · `aspectRatio` · `baseline` · `opacity` · `clipRRect` · `clipOval` · `safeArea` · `rotatedBox` · `ignorePointer` · `absorbPointer` · `offstage` · `visibility`
+
+### Decorators (7)
+
+Visual decoration and transformation wrappers.
+
+`material` · `hero` · `decoratedBox` · `indexedStack` · `transform` · `backdropFilter` · `banner`
+
+### Scrollables (6)
+
+Scrollable containers and sliver-based layouts.
+
+`scrollView` · `gridView` · `pageView` · `customScrollView` · `sliverList` · `sliverGrid`
+
+### Interactives (6)
+
+Gesture and interaction wrappers.
+
+`inkWell` · `gestureDetector` · `tooltip` · `dismissible` · `draggable` · `longPressDraggable`
+
+### Animated Widgets (9)
+
+Implicit animation wrappers driven by prop changes.
+
+`animatedContainer` · `animatedOpacity` · `animatedCrossFade` · `animatedSwitcher` · `animatedAlign` · `animatedPadding` · `animatedPositioned` · `animatedSize` · `animatedScale`
+
+### Tiles (5)
+
+Structured list item components.
+
+`listTile` · `expansionTile` · `switchListTile` · `checkboxListTile` · `radioListTile`
+
+### Tables (4)
+
+Tabular data layout components.
+
+`table` · `tableRow` · `tableCell` · `dataTable`
+
+### Text Variants (3)
+
+Advanced text rendering beyond the basic `text` component.
+
+`selectableText` · `richText` · `defaultTextStyle`
+
+### Button Variants (5)
+
+Additional button styles beyond the core `button`.
+
+`textButton` · `outlinedButton` · `iconButton` · `floatingActionButton` · `segmentedButton`
+
+### Miscellaneous (7)
+
+Utility and display widgets.
+
+`placeholder` · `circleAvatar` · `verticalDivider` · `popupMenuButton` · `searchBar` · `searchAnchor` · `tooltip`
+
 ### Leaf Components (10)
 
 ```mermaid
@@ -233,6 +299,12 @@ graph LR
   style badge fill:#C8E6C9
   style switch_ fill:#C8E6C9
 ```
+
+### Interactive Inputs (3)
+
+Input components with state management.
+
+`slider` · `rangeSlider` · `radio`
 
 #### `text`
 
@@ -389,7 +461,7 @@ Copies the message to the system clipboard.
 
 ### `openUrl`
 
-Signals the intent to open a URL (currently shows a snackbar).
+Opens the URL in the device's default browser via `url_launcher`.
 
 ```json
 { "type": "openUrl", "message": "https://flutter.dev" }
@@ -537,6 +609,12 @@ All interactive and leaf components include `Semantics` widgets for screen reade
 - `input` — marked as text field with label
 - `switch` — marked as toggled with label
 - `checkbox` — marked as checked with label
+- `textButton` / `outlinedButton` — marked as button with label
+- `inkWell` / `gestureDetector` — marked as button when action is present
+- `selectableText` — labeled with content
+- `richText` — labeled with concatenated span text
+- `placeholder` — labeled as "Placeholder"
+- `circleAvatar` — labeled with text or "Avatar"
 
 ---
 
