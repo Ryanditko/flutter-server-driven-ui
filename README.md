@@ -185,7 +185,7 @@ The server starts on `http://localhost:8080` and serves contracts from `assets/s
 {
   "schemaVersion": "1.0",
   "context": {
-    "user": { "name": "Jane" }
+    "user": { "name": "Ryanditko" }
   },
   "theme": {
     "primaryColor": "#820AD1",
