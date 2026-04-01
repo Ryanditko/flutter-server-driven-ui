@@ -28,7 +28,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Profile'), findsOneWidget);
-    expect(find.text('Jane Doe'), findsOneWidget);
+    expect(find.text('Ryanditko'), findsOneWidget);
 
     await tester.tap(find.text('Back to Home'));
     await tester.pumpAndSettle();
