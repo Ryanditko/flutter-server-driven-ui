@@ -7,22 +7,33 @@ import '../expression/template_engine.dart';
 import '../models/screen_contract.dart';
 import '../utils/color_utils.dart';
 import 'component_registry.dart';
+import '../../presentation/widgets/server_animated_widgets.dart';
 import '../../presentation/widgets/server_badge.dart';
 import '../../presentation/widgets/server_button.dart';
+import '../../presentation/widgets/server_button_variants.dart';
 import '../../presentation/widgets/server_carousel.dart';
 import '../../presentation/widgets/server_checkbox.dart';
 import '../../presentation/widgets/server_chip.dart';
+import '../../presentation/widgets/server_decorators.dart';
 import '../../presentation/widgets/server_divider.dart';
 import '../../presentation/widgets/server_dropdown.dart';
 import '../../presentation/widgets/server_expanded.dart';
 import '../../presentation/widgets/server_icon.dart';
 import '../../presentation/widgets/server_image.dart';
 import '../../presentation/widgets/server_input.dart';
+import '../../presentation/widgets/server_input_variants.dart';
+import '../../presentation/widgets/server_interactives.dart';
+import '../../presentation/widgets/server_layout_wrappers.dart';
+import '../../presentation/widgets/server_misc.dart';
 import '../../presentation/widgets/server_progress.dart';
 import '../../presentation/widgets/server_responsive.dart';
+import '../../presentation/widgets/server_scrollables.dart';
 import '../../presentation/widgets/server_switch.dart';
 import '../../presentation/widgets/server_tab_bar.dart';
+import '../../presentation/widgets/server_tables.dart';
 import '../../presentation/widgets/server_text.dart';
+import '../../presentation/widgets/server_text_variants.dart';
+import '../../presentation/widgets/server_tiles.dart';
 import '../../presentation/widgets/unknown_component.dart';
 
 /// Callback signature for input field changes.
@@ -49,7 +60,7 @@ class ComponentParser {
   }
 
   void _registerDefaults() {
-    // Layout
+    // Layout – core
     _registry.register('column', _buildColumn);
     _registry.register('row', _buildRow);
     _registry.register('container', _buildContainer);
@@ -63,21 +74,122 @@ class ComponentParser {
     _registry.register('expanded', buildServerExpanded);
     _registry.register('flexible', buildServerFlexible);
 
-    // Leaf
+    // Layout – wrappers
+    _registry.register('center', buildServerCenter);
+    _registry.register('align', buildServerAlign);
+    _registry.register('padding', buildServerPadding);
+    _registry.register('sizedBox', buildServerSizedBox);
+    _registry.register('aspectRatio', buildServerAspectRatio);
+    _registry.register('fittedBox', buildServerFittedBox);
+    _registry.register('constrainedBox', buildServerConstrainedBox);
+    _registry.register('fractionalSizedBox', buildServerFractionallySizedBox);
+    _registry.register('safeArea', buildServerSafeArea);
+    _registry.register('intrinsicHeight', buildServerIntrinsicHeight);
+    _registry.register('intrinsicWidth', buildServerIntrinsicWidth);
+    _registry.register('limitedBox', buildServerLimitedBox);
+    _registry.register('overflowBox', buildServerOverflowBox);
+    _registry.register('offstage', buildServerOffstage);
+    _registry.register('ignorePointer', buildServerIgnorePointer);
+    _registry.register('absorbPointer', buildServerAbsorbPointer);
+    _registry.register('clipRRect', buildServerClipRRect);
+    _registry.register('clipOval', buildServerClipOval);
+    _registry.register('opacity', buildServerOpacity);
+    _registry.register('rotatedBox', buildServerRotatedBox);
+    _registry.register('coloredBox', buildServerColoredBox);
+    _registry.register('baseline', buildServerBaseline);
+
+    // Layout – decorators
+    _registry.register('material', buildServerMaterial);
+    _registry.register('hero', buildServerHero);
+    _registry.register('indexedStack', buildServerIndexedStack);
+    _registry.register('decoratedBox', buildServerDecoratedBox);
+    _registry.register('transform', buildServerTransform);
+    _registry.register('backdropFilter', buildServerBackdropFilter);
+    _registry.register('banner', buildServerBanner);
+
+    // Layout – scrollables
+    _registry.register('scrollView', buildServerScrollView);
+    _registry.register('gridView', buildServerGridView);
+    _registry.register('pageView', buildServerPageView);
+    _registry.register('customScrollView', buildServerCustomScrollView);
+    _registry.register('sliverList', buildServerSliverList);
+    _registry.register('sliverGrid', buildServerSliverGrid);
+
+    // Layout – interactives
+    _registry.register('inkWell', buildServerInkWell);
+    _registry.register('gestureDetector', buildServerGestureDetector);
+    _registry.register('tooltip', buildServerTooltip);
+    _registry.register('dismissible', buildServerDismissible);
+    _registry.register('draggable', buildServerDraggable);
+    _registry.register('longPressDraggable', buildServerLongPressDraggable);
+
+    // Layout – animated
+    _registry.register('animatedContainer', buildServerAnimatedContainer);
+    _registry.register('animatedOpacity', buildServerAnimatedOpacity);
+    _registry.register('animatedCrossFade', buildServerAnimatedCrossFade);
+    _registry.register('animatedSwitcher', buildServerAnimatedSwitcher);
+    _registry.register('animatedAlign', buildServerAnimatedAlign);
+    _registry.register('animatedPadding', buildServerAnimatedPadding);
+    _registry.register('animatedPositioned', buildServerAnimatedPositioned);
+    _registry.register('animatedSize', buildServerAnimatedSize);
+    _registry.register('fadeTransition', buildServerFadeTransition);
+
+    // Layout – tiles
+    _registry.register('expansionTile', buildServerExpansionTile);
+
+    // Layout – tables
+    _registry.register('table', buildServerTable);
+    _registry.register('tableRow', buildServerTableRow);
+    _registry.register('tableCell', buildServerTableCell);
+
+    // Layout – text
+    _registry.register('defaultTextStyle', buildServerDefaultTextStyle);
+
+    // Leaf – text
     _registry.register('text', buildServerText);
+    _registry.register('selectableText', buildServerSelectableText);
+    _registry.register('richText', buildServerRichText);
+
+    // Leaf – buttons
     _registry.register('button', buildServerButton);
+    _registry.register('textButton', buildServerTextButton);
+    _registry.register('outlinedButton', buildServerOutlinedButton);
+    _registry.register('iconButton', buildServerIconButton);
+    _registry.register('floatingActionButton', buildServerFab);
+    _registry.register('segmentedButton', buildServerSegmentedButton);
+
+    // Leaf – media & display
     _registry.register('image', buildServerImage);
-    _registry.register('input', _buildInput);
     _registry.register('divider', buildServerDivider);
+    _registry.register('verticalDivider', buildServerVerticalDivider);
     _registry.register('icon', buildServerIcon);
     _registry.register('chip', buildServerChip);
     _registry.register('progress', buildServerProgress);
+    _registry.register('linearProgressIndicator', buildServerLinearProgressIndicator);
+    _registry.register('circularProgressIndicator', buildServerCircularProgressIndicator);
     _registry.register('badge', buildServerBadge);
+    _registry.register('placeholder', buildServerPlaceholder);
+    _registry.register('circleAvatar', buildServerCircleAvatar);
+    _registry.register('listTile', buildServerListTile);
+    _registry.register('popupMenuButton', buildServerPopupMenuButton);
+    _registry.register('searchBar', buildServerSearchBar);
+    _registry.register('dataTable', buildServerDataTable);
 
-    // Interactive / composite
+    // Leaf – input
+    _registry.register('input', _buildInput);
+
+    // Interactive / composite – input-like (need onInputChanged)
     _registry.register('switch', _buildSwitch);
     _registry.register('checkbox', _buildCheckbox);
     _registry.register('dropdown', _buildDropdown);
+    _registry.register('slider', _buildSlider);
+    _registry.register('rangeSlider', _buildRangeSlider);
+    _registry.register('radio', _buildRadio);
+    _registry.register('switchListTile', _buildSwitchListTile);
+    _registry.register('checkboxListTile', _buildCheckboxListTile);
+    _registry.register('radioListTile', _buildRadioListTile);
+
+    // Interactive / composite
     _registry.register('tabBar', buildServerTabBar);
     _registry.register('carousel', buildServerCarousel);
   }
@@ -357,6 +469,54 @@ class ComponentParser {
     Widget Function(ComponentNode) buildChild,
   ) {
     return buildServerDropdown(node, context, buildChild, onChanged: onInputChanged);
+  }
+
+  Widget _buildSlider(
+    ComponentNode node,
+    BuildContext context,
+    Widget Function(ComponentNode) buildChild,
+  ) {
+    return buildServerSlider(node, context, buildChild, onChanged: onInputChanged);
+  }
+
+  Widget _buildRangeSlider(
+    ComponentNode node,
+    BuildContext context,
+    Widget Function(ComponentNode) buildChild,
+  ) {
+    return buildServerRangeSlider(node, context, buildChild, onChanged: onInputChanged);
+  }
+
+  Widget _buildRadio(
+    ComponentNode node,
+    BuildContext context,
+    Widget Function(ComponentNode) buildChild,
+  ) {
+    return buildServerRadio(node, context, buildChild, onChanged: onInputChanged);
+  }
+
+  Widget _buildSwitchListTile(
+    ComponentNode node,
+    BuildContext context,
+    Widget Function(ComponentNode) buildChild,
+  ) {
+    return buildServerSwitchListTile(node, context, buildChild, onChanged: onInputChanged);
+  }
+
+  Widget _buildCheckboxListTile(
+    ComponentNode node,
+    BuildContext context,
+    Widget Function(ComponentNode) buildChild,
+  ) {
+    return buildServerCheckboxListTile(node, context, buildChild, onChanged: onInputChanged);
+  }
+
+  Widget _buildRadioListTile(
+    ComponentNode node,
+    BuildContext context,
+    Widget Function(ComponentNode) buildChild,
+  ) {
+    return buildServerRadioListTile(node, context, buildChild, onChanged: onInputChanged);
   }
 
   // -------------------------------------------------------------------------

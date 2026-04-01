@@ -8,13 +8,48 @@ class ContractValidator {
   static const supportedSchemaVersions = {'1.0'};
 
   static const _layoutTypes = {
+    // Core layout
     'column', 'row', 'container', 'card', 'listView', 'stack', 'positioned',
     'wrap', 'responsive', 'expanded', 'flexible', 'tabBar', 'carousel',
+    // Layout wrappers
+    'center', 'align', 'padding', 'sizedBox', 'aspectRatio', 'fittedBox',
+    'constrainedBox', 'fractionalSizedBox', 'safeArea', 'intrinsicHeight',
+    'intrinsicWidth', 'limitedBox', 'overflowBox', 'offstage', 'ignorePointer',
+    'absorbPointer', 'clipRRect', 'clipOval', 'opacity', 'rotatedBox',
+    'coloredBox', 'baseline',
+    // Decorators
+    'material', 'hero', 'indexedStack', 'decoratedBox', 'transform',
+    'backdropFilter', 'banner',
+    // Scrollables
+    'scrollView', 'gridView', 'pageView', 'customScrollView', 'sliverList',
+    'sliverGrid',
+    // Interactives
+    'inkWell', 'gestureDetector', 'tooltip', 'dismissible', 'draggable',
+    'longPressDraggable',
+    // Animated
+    'animatedContainer', 'animatedOpacity', 'animatedCrossFade',
+    'animatedSwitcher', 'animatedAlign', 'animatedPadding',
+    'animatedPositioned', 'animatedSize', 'fadeTransition',
+    // Tiles & tables
+    'expansionTile', 'table', 'tableRow', 'tableCell', 'defaultTextStyle',
   };
 
   static const _leafTypes = {
-    'text', 'button', 'image', 'input', 'spacer', 'divider', 'icon',
-    'chip', 'progress', 'badge', 'switch', 'checkbox', 'dropdown',
+    // Text
+    'text', 'selectableText', 'richText',
+    // Buttons
+    'button', 'textButton', 'outlinedButton', 'iconButton',
+    'floatingActionButton', 'segmentedButton',
+    // Media & display
+    'image', 'divider', 'verticalDivider', 'icon', 'chip', 'progress',
+    'linearProgressIndicator', 'circularProgressIndicator',
+    'badge', 'placeholder', 'circleAvatar', 'listTile',
+    'popupMenuButton', 'searchBar', 'dataTable',
+    // Input
+    'input', 'spacer',
+    // Interactive input
+    'switch', 'checkbox', 'dropdown', 'slider', 'rangeSlider', 'radio',
+    'switchListTile', 'checkboxListTile', 'radioListTile',
   };
 
   static const _actionTypes = {
